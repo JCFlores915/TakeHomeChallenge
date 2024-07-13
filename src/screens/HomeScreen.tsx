@@ -35,7 +35,13 @@ const HomeScreen = ({ navigation }: Props) => {
     };
 
     const renderFooter = () => {
-        if (loading) return <ActivityIndicator size="large" color="#0000ff" />;
+        if (loading) {
+            return (
+                <View style={styles.loadingContainer}>
+                    <ActivityIndicator size="large" color="#34c759" />
+                </View>
+            );
+        }
         return null;
     };
 
@@ -51,26 +57,29 @@ const HomeScreen = ({ navigation }: Props) => {
                 onChangeText={(text) => setName(text)}
             />
             <FlatList
-        data={data?.characters?.results || []}
-        keyExtractor={(item) => item.id.toString()}
-        onEndReached={loadMore}
-        ListFooterComponent={renderFooter}
-        renderItem={({ item }) => (
-          <Pressable
-            style={({ pressed }) => [
-              styles.row,
-              { backgroundColor: pressed ? '#333' : '#111' },
-            ]}
-            onPress={() => navigation.navigate('Details', { id: item.id })}
-          >
-            <Image source={{ uri: item.image }} style={styles.avatar} />
-            <View style={styles.infoContainer}>
-              <Text style={styles.characterName}>{item.name}</Text>
-              <Text style={styles.characterSpecies}>{item.species}</Text>
-            </View>
-          </Pressable>
-        )}
-      />
+                data={data?.characters?.results || []}
+                keyExtractor={(item) => item.id.toString()}
+                onEndReached={loadMore}
+                ListFooterComponent={renderFooter}
+                ListEmptyComponent={() => (
+                    !loading && <Text style={styles.emptyText}>No characters found matching "{name}"</Text>
+                  )}
+                renderItem={({ item }) => (
+                    <Pressable
+                        style={({ pressed }) => [
+                            styles.row,
+                            { backgroundColor: pressed ? '#333' : '#111' },
+                        ]}
+                        onPress={() => navigation.navigate('Details', { id: item.id })}
+                    >
+                        <Image source={{ uri: item.image }} style={styles.avatar} />
+                        <View style={styles.infoContainer}>
+                            <Text style={styles.characterName}>{item.name}</Text>
+                            <Text style={styles.characterSpecies}>{item.species}</Text>
+                        </View>
+                    </Pressable>
+                )}
+            />
         </View>
     );
 
@@ -78,47 +87,59 @@ const HomeScreen = ({ navigation }: Props) => {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      backgroundColor: '#222222',
-      padding: 10,
+        flex: 1,
+        backgroundColor: '#222222',
+        padding: 10,
     },
     input: {
-      backgroundColor: '#333333',
-      color: '#34c759',
-      borderRadius: 10,
-      padding: 10,
-      marginVertical: 10,
+        backgroundColor: '#333333',
+        color: '#34c759',
+        borderRadius: 10,
+        padding: 10,
+        marginVertical: 10,
     },
     errorText: {
-      color: '#ff3b30',
-      textAlign: 'center',
-      marginVertical: 10,
+        color: '#ff3b30',
+        textAlign: 'center',
+        marginVertical: 10,
     },
     row: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: 10,
-      marginVertical: 5,
-      borderRadius: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10,
+        marginVertical: 5,
+        borderRadius: 10,
     },
     avatar: {
-      width: 50,
-      height: 50,
-      borderRadius: 25,
+        width: 50,
+        height: 50,
+        borderRadius: 25,
     },
     infoContainer: {
-      marginLeft: 10,
+        marginLeft: 10,
     },
     characterName: {
-      color: '#34c759',
-      fontSize: 18,
-      fontWeight: 'bold',
+        color: '#34c759',
+        fontSize: 18,
+        fontWeight: 'bold',
     },
     characterSpecies: {
-      color: '#34c759',
-      fontSize: 14,
+        color: '#34c759',
+        fontSize: 14,
     },
-  });
-  
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: 100,
+    },
+    emptyText: {
+        color: '#34c759',
+        textAlign: 'center',
+        marginVertical: 20,
+        fontSize: 18,
+      },
+});
+
 
 export default HomeScreen;
