@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { FlatList, View, Text, Image, TextInput, ActivityIndicator, TouchableOpacity, StyleSheet } from 'react-native';
+import { FlatList, View, Text, Image, TextInput, ActivityIndicator, Pressable, StyleSheet } from 'react-native';
 import { useQuery } from '@apollo/client';
 import { GET_CHARACTERS } from '../apollo/characters/queries';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/Navigation';
 interface Props extends StackScreenProps<RootStackParamList, 'Home'> { }
 
-const HomeScreen = ({navigation}: Props) => {
+const HomeScreen = ({ navigation }: Props) => {
     const [page, setPage] = useState(1);
     const [name, setName] = useState('');
     const [species, setSpecies] = useState('');
@@ -43,78 +43,80 @@ const HomeScreen = ({navigation}: Props) => {
 
     return (
         <View style={styles.container}>
-      <TextInput
-        placeholder="Search by name"
-        placeholderTextColor="#00ff00"
-        style={styles.input}
-        value={name}
-        onChangeText={(text) => setName(text)}
-      />
-      <FlatList
+            <TextInput
+                placeholder="Search by name"
+                placeholderTextColor="#00ff00"
+                style={styles.input}
+                value={name}
+                onChangeText={(text) => setName(text)}
+            />
+            <FlatList
         data={data?.characters?.results || []}
         keyExtractor={(item) => item.id.toString()}
         onEndReached={loadMore}
         ListFooterComponent={renderFooter}
         renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.card}
+          <Pressable
+            style={({ pressed }) => [
+              styles.row,
+              { backgroundColor: pressed ? '#333' : '#111' },
+            ]}
             onPress={() => navigation.navigate('Details', { id: item.id })}
           >
-            <Image source={{ uri: item.image }} style={styles.image} />
-            <Text style={styles.characterName}>{item.name}</Text>
-            <Text style={styles.characterSpecies}>{item.species}</Text>
-          </TouchableOpacity>
+            <Image source={{ uri: item.image }} style={styles.avatar} />
+            <View style={styles.infoContainer}>
+              <Text style={styles.characterName}>{item.name}</Text>
+              <Text style={styles.characterSpecies}>{item.species}</Text>
+            </View>
+          </Pressable>
         )}
       />
-    </View>
+        </View>
     );
-    
+
 }
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#000',
+      backgroundColor: '#222222',
       padding: 10,
     },
     input: {
-      backgroundColor: '#222',
-      color: '#00ff00',
+      backgroundColor: '#333333',
+      color: '#34c759',
       borderRadius: 10,
       padding: 10,
       marginVertical: 10,
     },
     errorText: {
-      color: '#ff0000',
+      color: '#ff3b30',
       textAlign: 'center',
       marginVertical: 10,
     },
-    card: {
-      backgroundColor: '#111',
-      borderRadius: 10,
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
       padding: 10,
-      marginVertical: 10,
-      shadowColor: '#00ff00',
-      shadowOffset: { width: 0, height: 10 },
-      shadowOpacity: 0.8,
-      shadowRadius: 20,
-      elevation: 10,
-    },
-    image: {
-      width: '100%',
-      height: 200,
+      marginVertical: 5,
       borderRadius: 10,
+    },
+    avatar: {
+      width: 50,
+      height: 50,
+      borderRadius: 25,
+    },
+    infoContainer: {
+      marginLeft: 10,
     },
     characterName: {
-      color: '#00ff00',
+      color: '#34c759',
       fontSize: 18,
       fontWeight: 'bold',
-      marginTop: 10,
     },
     characterSpecies: {
-      color: '#00ff00',
+      color: '#34c759',
       fontSize: 14,
-      marginTop: 5,
     },
   });
   

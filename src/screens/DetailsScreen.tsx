@@ -21,11 +21,10 @@ const DetailsScreen = ({ route }: { route: DetailsScreenRouteProp }) => {
     if (loading) return <Text style={styles.loadingText}>Loading...</Text>;
     if (error) return <Text style={styles.errorText}>Error: {error.message}</Text>;
   
-  
     const character = data.character;
   
     return (
-        <View style={styles.container}>
+      <View style={styles.container}>
         <Image source={{ uri: character.image }} style={styles.image} />
         <Text style={styles.name}>{character.name}</Text>
         <Text style={styles.detail}>Species: {character.species}</Text>
@@ -36,58 +35,67 @@ const DetailsScreen = ({ route }: { route: DetailsScreenRouteProp }) => {
         <FlatList
           data={character.episode}
           keyExtractor={(item) => item?.id?.toString()}
-          renderItem={({ item }) => <Text style={styles.episodeName}>{item.name}</Text>}
+          renderItem={({ item }) => (
+            <View style={styles.episodeContainer}>
+              <Text style={styles.episodeName}>{item.name}</Text>
+            </View>
+          )}
         />
       </View>
     );
   };
-
-
+  
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#000',
+      backgroundColor: '#222222',
       padding: 20,
     },
     loadingText: {
-      color: '#00ff00',
+      color: '#34c759',
       textAlign: 'center',
       marginVertical: 10,
     },
     errorText: {
-      color: '#ff0000',
+      color: '#ff3b30',
       textAlign: 'center',
       marginVertical: 10,
     },
     image: {
       width: '100%',
-      height: 300,
+      height: 250,
       borderRadius: 10,
       marginBottom: 20,
     },
     name: {
-      color: '#00ff00',
+      color: '#34c759',
       fontSize: 24,
       fontWeight: 'bold',
       textAlign: 'center',
       marginBottom: 20,
     },
     detail: {
-      color: '#00ff00',
+      color: '#34c759',
       fontSize: 18,
       marginBottom: 10,
     },
     episodeTitle: {
-      color: '#00ff00',
+      color: '#34c759',
       fontSize: 20,
       fontWeight: 'bold',
       marginTop: 20,
       marginBottom: 10,
     },
+    episodeContainer: {
+      backgroundColor: '#333333',
+      borderRadius: 10,
+      padding: 10,
+      marginBottom: 10,
+    },
     episodeName: {
-      color: '#00ff00',
+      color: '#34c759',
       fontSize: 16,
-      marginBottom: 5,
     },
   });
+  
 export default DetailsScreen;
