@@ -17,7 +17,14 @@ const HomeScreen = ({ navigation }: Props) => {
         variables: { page, name, species, status },
     });
 
-    if (error) return <Text>Error :(</Text>;
+    if (error) {
+        return (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>Error: {error.message}</Text>
+          </View>
+        );
+      }
+  
 
     const loadMore = () => {
         if (data?.characters.info.next) {
@@ -39,6 +46,7 @@ const HomeScreen = ({ navigation }: Props) => {
             return (
                 <View style={styles.loadingContainer}>
                     <ActivityIndicator size="large" color="#34c759" />
+                    <Text style={styles.loadingText}>Loading...</Text>
                 </View>
             );
         }
@@ -131,8 +139,19 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        height: 100,
-    },
+        backgroundColor: '#222222',
+      },
+      errorContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#222222',
+      },
+      loadingText: {
+        color: '#34c759',
+        textAlign: 'center',
+        marginVertical: 10,
+      },
     emptyText: {
         color: '#34c759',
         textAlign: 'center',

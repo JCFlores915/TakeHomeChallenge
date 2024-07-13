@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { View, Text, Image, FlatList, StyleSheet } from 'react-native';
+import { View, Text, Image, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import { useQuery } from '@apollo/client';
 import { GET_CHARACTER_BY_ID } from '../apollo/characters/queries';
 import { RouteProp } from '@react-navigation/native';
@@ -18,8 +18,22 @@ const DetailsScreen = ({ route }: { route: DetailsScreenRouteProp }) => {
       variables: { id },
     });
   
-    if (loading) return <Text style={styles.loadingText}>Loading...</Text>;
-    if (error) return <Text style={styles.errorText}>Error: {error.message}</Text>;
+    if (loading) {
+        return (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#34c759" />
+            <Text style={styles.loadingText}>Loading...</Text>
+          </View>
+        );
+      }
+    
+      if (error) {
+        return (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>Error: {error.message}</Text>
+          </View>
+        );
+      }
   
     const character = data.character;
   
@@ -51,6 +65,18 @@ const DetailsScreen = ({ route }: { route: DetailsScreenRouteProp }) => {
       backgroundColor: '#222222',
       padding: 20,
     },
+    loadingContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#222222',
+    },
+    errorContainer: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#222222',
+    },
     loadingText: {
       color: '#34c759',
       textAlign: 'center',
@@ -63,7 +89,7 @@ const DetailsScreen = ({ route }: { route: DetailsScreenRouteProp }) => {
     },
     image: {
       width: '100%',
-      height: 250,
+      height: 300,
       borderRadius: 10,
       marginBottom: 20,
     },
@@ -97,5 +123,6 @@ const DetailsScreen = ({ route }: { route: DetailsScreenRouteProp }) => {
       fontSize: 16,
     },
   });
+  
   
 export default DetailsScreen;
