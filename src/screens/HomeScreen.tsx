@@ -128,6 +128,7 @@ const HomeScreen = ({ navigation }: Props) => {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalContent}>
                         <Text style={styles.modalTitle}>Filters</Text>
+
                         <View style={styles.inputModalContent}>
                             <TextInput
                                 placeholder="Species"
@@ -137,7 +138,7 @@ const HomeScreen = ({ navigation }: Props) => {
                                 onChangeText={(text: string) => setSpecies(text)}
                             />
                             <View style={styles.radioContainer}>
-                                <Text style={styles.radioText}>Status:</Text>
+                                <Text style={styles.titleRadioText}>Status:</Text>
                                 <TouchableOpacity
                                     style={styles.radioButton}
                                     onPress={() => setSelectedStatus('alive')}
@@ -162,8 +163,20 @@ const HomeScreen = ({ navigation }: Props) => {
                             </View>
                         </View>
                         <View style={styles.modalButtonContainer}>
-                            <Button title="Apply" onPress={applyFilters} color="#34c759" />
-                            <Button title="Reset" onPress={resetFilters} color="#ff3b30" />
+                            <View style={styles.buttonAction}>
+                                <TouchableOpacity style={styles.applyFilters} onPress={applyFilters}>
+                                    <Text style={styles.textApplyFilters}>APPLY</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity style={styles.resetFilters} onPress={resetFilters}>
+                                    <Text style={styles.textResetFilters}>RESET</Text>
+                                </TouchableOpacity>
+                            </View>
+
+                            <TouchableOpacity style={styles.modalClose} onPress={() => setModalVisible(false)}>
+                                <Text style={styles.textModalClose}>CLOSE</Text>
+                            </TouchableOpacity>
+
                         </View>
                     </View>
                 </View>
@@ -190,6 +203,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 10,
         marginRight: 10,
+        width: '100%',
     },
     filterButton: {
         backgroundColor: '#34c759',
@@ -274,10 +288,39 @@ const styles = StyleSheet.create({
         fontSize: 20,
         marginBottom: 10,
     },
+    modalClose: {
+        backgroundColor: '#333333',
+        padding: 10,
+        borderRadius: 10,
+    },
+    textModalClose: {
+        color: '#34c759',
+    },
     modalButtonContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginTop: 20,
+    },
+    buttonAction: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        gap: 10,
+    },
+    applyFilters: {
+        backgroundColor: '#34c759',
+        padding: 10,
+        borderRadius: 10,
+    },
+    textApplyFilters: {
+        color: '#ffffff',
+    },
+    resetFilters: {
+        backgroundColor: '#ff3b30',
+        padding: 10,
+        borderRadius: 10,
+    },
+    textResetFilters: {
+        color: '#ffffff',
     },
     tagsContainer: {
         flexDirection: 'row',
@@ -294,6 +337,12 @@ const styles = StyleSheet.create({
         marginRight: 5,
         marginBottom: 5,
     },
+    titleRadioText: {
+        color: '#34c759',
+        fontSize: 16,
+        fontWeight: 'bold',
+        textDecorationLine: 'underline',
+    },
     radioContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -305,7 +354,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginRight: 20,
-    
+
     },
     radioText: {
         color: '#34c759',
