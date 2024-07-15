@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, Image, FlatList, StyleSheet, ActivityIndicator} from 'react-native';
 import { useQuery } from '@apollo/client';
 import { GET_CHARACTER_BY_ID } from '../apollo/characters/queries';
 import { RouteProp } from '@react-navigation/native';

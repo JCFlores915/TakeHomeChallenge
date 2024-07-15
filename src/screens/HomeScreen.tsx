@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FlatList, View, Text, Image, ActivityIndicator, Pressable, StyleSheet, Modal, TouchableOpacity, Button, TextInput } from 'react-native';
 import { useQuery } from '@apollo/client';
 import { GET_CHARACTERS } from '../apollo/characters/queries';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParamList } from '../navigation/Navigation';
+import useAllSpecies from '../hooks/useAllSpecies';
+import SpeciesComponent from '../components/SpeciesComponent';
 
 interface Props extends StackScreenProps<RootStackParamList, 'Home'> { }
 
@@ -13,10 +15,24 @@ const HomeScreen = ({ navigation }: Props) => {
     const [species, setSpecies] = useState('');
     const [selectedStatus, setSelectedStatus] = useState('');
     const [isModalVisible, setModalVisible] = useState(false);
+    const [availableSpecies, setAvailableSpecies] = useState<string[]>([]);
 
+    const { species: allAvailableSpecies, loading: speciesLoading, error: speciesError } = useAllSpecies();
+    
     const { loading, error, data, fetchMore, refetch } = useQuery(GET_CHARACTERS, {
         variables: { page, name, species, status: selectedStatus },
+        // onCompleted: (data) => {
+        //     const speciesList = Array.from(new Set(data.characters.results.map((character: any) => character.species))) as string[];
+        //     console.log(speciesList);
+        //     // setAvailableSpecies(speciesList);
+        // }
     });
+
+    useEffect(() => {
+        if (allAvailableSpecies.length) {
+            setAvailableSpecies(allAvailableSpecies);
+        }
+    }, [allAvailableSpecies]);
 
     if (error) {
         return (
@@ -35,8 +51,10 @@ const HomeScreen = ({ navigation }: Props) => {
                         ...prevResult.characters.results,
                         ...fetchMoreResult.characters.results,
                     ];
+                    
                     return fetchMoreResult;
                 },
+                
             });
         }
     };
@@ -75,6 +93,7 @@ const HomeScreen = ({ navigation }: Props) => {
         }
         return null;
     };
+
 
     return (
         <View style={styles.container}>
@@ -131,14 +150,22 @@ const HomeScreen = ({ navigation }: Props) => {
 
                         <View style={styles.inputModalContent}>
                             <View style={styles.inputContainer}>
-                                <Text style={styles.titleRadioText}>Name:</Text>
-                                <TextInput
+                                <Text style={styles.titleRadioText}>Species:</Text>
+                                {/* <TextInput
                                     placeholder="Name"
                                     placeholderTextColor="#00ff00"
                                     style={styles.input}
                                     value={name}
                                     onChangeText={(text: string) => setName(text)}
-                                />
+                                /> */}
+
+                               <SpeciesComponent 
+                                availableSpecies={availableSpecies}
+                                species={species}
+                                setSpecies={setSpecies}
+                                speciesLoading={speciesLoading}
+                                speciesError={speciesError}
+                               />
                             </View>
                             <View style={styles.radioContainer}>
                                 <Text style={styles.titleRadioText}>Status:</Text>

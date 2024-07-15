@@ -37,3 +37,16 @@ export const GET_CHARACTER_BY_ID = gql`
     }
   }
 `;
+
+export const GET_ALL_CHARACTERS = gql`
+  query GetAllCharacters($page: Int) {
+    characters(page: $page) {
+      info {
+        next
+      }
+      results {
+        species
+      }
+    }
+  }
+`;
