@@ -1,51 +1,36 @@
 import React from 'react';
-import { View, Text, Image, FlatList, StyleSheet, ActivityIndicator} from 'react-native';
-import { useQuery } from '@apollo/client';
-import { GET_CHARACTER_BY_ID } from '../apollo/characters/queries';
+import { View, Text, Image, FlatList, StyleSheet } from 'react-native';
 import { RouteProp } from '@react-navigation/native';
-
-type RootStackParamList = {
-    Details: { id: string };
-};
+import { RootStackParamList } from '../types';
+;
 
 type DetailsScreenRouteProp = RouteProp<RootStackParamList, 'Details'>;
 
 const DetailsScreen = ({ route }: { route: DetailsScreenRouteProp }) => {
-    const { id } = route.params;
-    const { loading, error, data } = useQuery(GET_CHARACTER_BY_ID, {
-        variables: { id },
-    });
+    console.log(route);
+    const {
+        id,
+        name,
+        species,
+        status,
+        gender,
+        image,
+        location,
+        episode
+    } = route.params;
 
-    if (loading) {
-        return (
-            <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#34c759" />
-                <Text style={styles.loadingText}>Loading...</Text>
-            </View>
-        );
-    }
-
-    if (error) {
-        return (
-            <View style={styles.errorContainer}>
-                <Text style={styles.errorText}>Error: {error.message}</Text>
-            </View>
-        );
-    }
-
-    const character = data.character;
 
     return (
         <View style={styles.container}>
-            <Image source={{ uri: character.image }} style={styles.image} />
-            <Text style={styles.name}>{character.name}</Text>
-            <Text style={styles.detail}>Species: {character.species}</Text>
-            <Text style={styles.detail}>Status: {character.status}</Text>
-            <Text style={styles.detail}>Gender: {character.gender}</Text>
-            <Text style={styles.detail}>Location: {character.location.name}</Text>
+            <Image source={{ uri: image }} style={styles.image} />
+            <Text style={styles.name}>{name}</Text>
+            <Text style={styles.detail}>Species: {species}</Text>
+            <Text style={styles.detail}>Status: {status}</Text>
+            <Text style={styles.detail}>Gender: {gender}</Text>
+            <Text style={styles.detail}>Location: {location.name}</Text>
             <Text style={styles.episodeTitle}>Episodes:</Text>
             <FlatList
-                data={character.episode}
+                data={episode}
                 keyExtractor={(item, index) => item?.id?.toString() || index.toString()}
                 renderItem={({ item }) => (
                     <View style={styles.episodeContainer}>

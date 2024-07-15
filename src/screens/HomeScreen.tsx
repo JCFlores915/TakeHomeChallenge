@@ -3,9 +3,9 @@ import { FlatList, View, Text, Image, ActivityIndicator, Pressable, StyleSheet, 
 import { useQuery } from '@apollo/client';
 import { GET_CHARACTERS } from '../apollo/characters/queries';
 import { StackScreenProps } from '@react-navigation/stack';
-import { RootStackParamList } from '../navigation/Navigation';
 import useAllSpecies from '../hooks/useAllSpecies';
 import SpeciesComponent from '../components/SpeciesComponent';
+import { RootStackParamList } from '../types';
 
 interface Props extends StackScreenProps<RootStackParamList, 'Home'> { }
 
@@ -127,7 +127,7 @@ const HomeScreen = ({ navigation }: Props) => {
                             styles.row,
                             { backgroundColor: pressed ? '#333' : '#111' },
                         ]}
-                        onPress={() => navigation.navigate('Details', { id: item.id })}
+                        onPress={() => navigation.navigate('Details', item)}
                     >
                         <Image source={{ uri: item.image }} style={styles.avatar} />
                         <View style={styles.infoContainer}>
@@ -151,14 +151,6 @@ const HomeScreen = ({ navigation }: Props) => {
                         <View style={styles.inputModalContent}>
                             <View style={styles.inputContainer}>
                                 <Text style={styles.titleRadioText}>Species:</Text>
-                                {/* <TextInput
-                                    placeholder="Name"
-                                    placeholderTextColor="#00ff00"
-                                    style={styles.input}
-                                    value={name}
-                                    onChangeText={(text: string) => setName(text)}
-                                /> */}
-
                                <SpeciesComponent 
                                 availableSpecies={availableSpecies}
                                 species={species}
