@@ -31,7 +31,7 @@ const useAllSpecies = () => {
           nextPage = data.characters.info.next;
         }
 
-        setSpecies(Array.from(new Set(allSpecies))); // Remove duplicates
+        setSpecies(Array.from(new Set(allSpecies))); 
       } catch (err: any) {
         setError(err.message);
       } finally {
