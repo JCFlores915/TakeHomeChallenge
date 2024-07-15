@@ -130,13 +130,16 @@ const HomeScreen = ({ navigation }: Props) => {
                         <Text style={styles.modalTitle}>Filters</Text>
 
                         <View style={styles.inputModalContent}>
-                            <TextInput
-                                placeholder="Species"
-                                placeholderTextColor="#00ff00"
-                                style={styles.input}
-                                value={species}
-                                onChangeText={(text: string) => setSpecies(text)}
-                            />
+                            <View style={styles.inputContainer}>
+                                <Text style={styles.titleRadioText}>Name:</Text>
+                                <TextInput
+                                    placeholder="Name"
+                                    placeholderTextColor="#00ff00"
+                                    style={styles.input}
+                                    value={name}
+                                    onChangeText={(text: string) => setName(text)}
+                                />
+                            </View>
                             <View style={styles.radioContainer}>
                                 <Text style={styles.titleRadioText}>Status:</Text>
                                 <TouchableOpacity
@@ -342,6 +345,12 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 'bold',
         textDecorationLine: 'underline',
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        gap: 10,
     },
     radioContainer: {
         flexDirection: 'row',
